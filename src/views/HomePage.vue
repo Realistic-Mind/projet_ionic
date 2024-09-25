@@ -18,6 +18,10 @@ Page 2
 <ion-button expand="block" color="medium" target=_blank href="/pageTrois">
 Page 3
 </ion-button>
+
+<ion-button expand="block" color="medium" target=_blank href="/pageQuatre">
+Page 4
+</ion-button>
 </div>
 </ion-content>
 

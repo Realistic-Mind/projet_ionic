@@ -1,2 +1,22 @@
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
+
+/* Add in theme/variables.scss or theme/global.scss */
+
+/* Shared button style */
+ion-button {
+    --background: #ffff00; /* Yellow background for buttons */
+    color: black;          /* Black text for all buttons */
+    font-weight: bold;      /* Bold text for buttons */
+  }
+  
+  /* Shared toolbar background */
+  ion-toolbar {
+    --background: #ffc0cb; /* Pink toolbar background */
+  }
+  
+  /* Shared content background */
+  ion-content {
+    background-color: #4b2e2a; /* Dark brown background */
+  }
+  

@@ -10,10 +10,13 @@
     </ion-header>
 
     <ion-content>
+      <!-- Input for Name -->
       <ion-item>
         <ion-label>Nom: </ion-label>
-        <ion-input v-model="monNom"></ion-input>
+        <ion-input v-model="monNom" placeholder="Entrez votre nom"></ion-input>
       </ion-item>
+
+      <!-- Select for Gender -->
       <ion-item>
         <ion-label>Genre</ion-label>
         <ion-select placeholder="choisir" v-model="monGenre">
@@ -22,6 +25,7 @@
         </ion-select>
       </ion-item>
 
+      <!-- Button to trigger the alert -->
       <ion-button @click="afficheDialogue">Afficher</ion-button>
     </ion-content>
 
@@ -60,23 +64,19 @@ export default defineComponent({
   },
   data() {
     return {
-      monNom: '',
-      monGenre: '',
+      monNom: "", // Holds the entered name
+      monGenre: "", // Holds the selected gender
     };
   },
   methods: {
     async afficheDialogue() {
-      const message = `Nom: ${this.monNom}, Genre: ${this.monGenre}`;
-      console.log("Mon alerte");
       const alert = await alertController.create({
         header: 'Mon alerte',
-        subHeader: 'Sous titre',
-        message: message,
-        buttons: ['OK', 'Cancel'],
+        subHeader: 'Votre Nom est:',
+        message: this.monNom + " " + this.monGenre,
+        buttons: ['OK', 'Cancel', 'More'],
       });
       await alert.present();
-      const { role } = await alert.onDidDismiss();
-      console.log('onDidDismiss: ', role);
     }
   }
 });

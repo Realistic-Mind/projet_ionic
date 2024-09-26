@@ -14,36 +14,19 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/login',
+    name: 'Login',
     component: Login,
   },
   {
     path: '/signup',
+    name: 'Signup',
     component: Signup,
-  },
-{
-  path: '/pageUn',
-  name: 'PageUn',
-  component: PageUn
-},
-{
-  path: '/pageDeux',
-  name: 'PageDeux',
-  component: PageDeux
-},
-{
-  path: '/pageTrois',
-  name: 'PageTrois',
-  component: PageTrois
-},
-{
-  path: '/pageQuatre',
-  name: 'PageQuatre',
-  component: PageQuatre
-}
+  }
+
 ]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes
 })
 

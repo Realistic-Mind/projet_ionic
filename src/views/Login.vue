@@ -1,38 +1,38 @@
 <template>
     <ion-page>
       <ion-header>
-        <ion-toolbar color="light" style="background-color: #ffc0cb;">
+        <ion-toolbar>
           <ion-title>Login</ion-title>
         </ion-toolbar>
       </ion-header>
   
-      <ion-content style="background-color: #4b2e2a;" class="ion-padding">
-        <!-- Input pour Email -->
-        <ion-item style="--background: #d3d3d3;">
+      <ion-content class="ion-padding">
+        <!-- Input for Email -->
+        <ion-item>
           <ion-label position="floating">Email</ion-label>
           <ion-input v-model="email" type="email" required></ion-input>
         </ion-item>
   
-        <!-- Input pour Password -->
-        <ion-item style="--background: #d3d3d3;">
+        <!-- Input for Password -->
+        <ion-item>
           <ion-label position="floating">Password</ion-label>
           <ion-input v-model="password" type="password" required></ion-input>
         </ion-item>
   
-        <!-- Bouton de Connexion -->
-        <ion-button expand="block" style="background-color: #ffff00; color: black; margin-top: 20px;" @click="handleLogin">LOGIN</ion-button>
+        <!-- Button for Login -->
+        <ion-button expand="block" @click="handleLogin">Login</ion-button>
   
-        <!-- Message d'erreur si échec de la connexion -->
+        <!-- Button for Sign Up (Redirects to the Sign Up page) -->
+        <ion-button expand="block" color="light" @click="goToSignUp">Sign Up</ion-button>
+  
+        <!-- Error message if login fails -->
         <ion-item v-if="errorMessage" style="background-color: transparent; color: red;">
           <ion-label>{{ errorMessage }}</ion-label>
         </ion-item>
-  
-        <!-- Bouton pour Sign Up -->
-        <ion-button expand="block" style="background-color: #ffff00; color: black; margin-top: 10px;" @click="goToSignup">SIGN UP</ion-button>
-    </ion-content>
+      </ion-content>
   
       <ion-footer>
-        <ion-toolbar color="dark">
+        <ion-toolbar>
           <ion-title>Pied de page</ion-title>
         </ion-toolbar>
       </ion-footer>
@@ -41,9 +41,21 @@
   
   <script lang="ts">
   import { defineComponent } from 'vue';
-  import axios from 'axios';
-  import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonFooter, IonItem, IonLabel, IonInput, IonButton } from '@ionic/vue';
-  import {useRouter} from 'vue-router'
+  import {
+    IonContent,
+    IonHeader,
+    IonPage,
+    IonTitle,
+    IonToolbar,
+    IonFooter,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonButton
+  } from '@ionic/vue';  // Import Ionic components
+  import { useRouter } from 'vue-router';  // Import Vue Router
+  import { login } from '../services/apiService';  // Import the API service
+  
   export default defineComponent({
     components: {
       IonContent,
@@ -57,39 +69,54 @@
       IonInput,
       IonButton,
     },
-    setup() {
-    const router = useRouter();
-    
-    const goToSignup = () => {
-      router.push('/signup');
-    };
-
-    return {
-      goToSignup,
-    };
-  },
     data() {
       return {
-        email: '',
-        password: '',
-        errorMessage: '', // Pour afficher un message d'erreur
+        email: '',      // Bound to email input
+        password: '',   // Bound to password input
+        errorMessage: '',  // Used to display any error messages
+      };
+    },
+    setup() {
+      const router = useRouter();
+  
+      const goToSignUp = () => {
+        router.push('/signup');  // Redirect to the Sign Up page
+      };
+  
+      return {
+        goToSignUp,
       };
     },
     methods: {
       async handleLogin() {
+        // Step 1: Check if email and password are filled
+        if (!this.email || !this.password) {
+          this.errorMessage = 'Please fill in both email and password';
+          return;
+        }
+  
         try {
-          const response = await axios.post('https://server-1-t93s.onrender.com/api/tp/login', {
-            email: this.email,
-            password: this.password,
-          });
+          // Step 2: Call the API to send the data
+          const data = await login(this.email, this.password);
+          console.log('Login Successful:', data);
   
-          console.log('Login Successful:', response.data);
-  
-          // Rediriger l'utilisateur vers la page de géolocalisation après une connexion réussie
-          this.$router.push('/geolocalisation');
+          // Step 3: Redirect to a simple page (e.g., home or dashboard)
+          this.$router.push('/geolocation');  // Redirect to a simple page like '/home'
         } catch (error) {
-          console.error('Erreur de connexion:', error.response.data);
-          this.errorMessage = 'Échec de la connexion. Veuillez vérifier vos informations.'; // Afficher un message d'erreur si la connexion échoue
+          // Step 4: Handle errors and display an error message
+          this.errorMessage = this.getErrorMessage(error);
+        }
+      },
+  
+      // Error handler to display meaningful messages
+      getErrorMessage(error: unknown) {
+        if (typeof error === 'object' && error !== null && 'response' in error) {
+          const axiosError = error as { response: { data: { message?: string } } };
+          return axiosError.response.data.message || 'Login failed. Please check your credentials.';
+        } else if (error instanceof Error) {
+          return error.message;
+        } else {
+          return 'An unknown error occurred.';
         }
       },
     },
@@ -99,15 +126,10 @@
   <style scoped>
   ion-item {
     margin-bottom: 15px;
-    --border-radius: 8px;
   }
   
   ion-label {
     color: black;
-  }
-  
-  ion-button {
-    font-weight: bold;
   }
   </style>
   

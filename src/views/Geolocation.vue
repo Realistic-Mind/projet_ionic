@@ -15,16 +15,18 @@
           <ion-label>Longitude: {{ longitude }}</ion-label>
         </ion-item>
   
-        <!-- Display full address (street, city, country, etc.) -->
+        <!-- Display full address components -->
         <ion-item v-if="address">
-          <ion-label>Address: {{ address }}</ion-label>
+          <ion-label>
+            Address: {{ address.house_number }} {{ address.road }}, {{ address.suburb }}, {{ address.city }}, {{ address.state }}, {{ address.postcode }}, {{ address.country }}
+          </ion-label>
         </ion-item>
   
         <!-- List of saved locations -->
         <ion-list>
           <ion-item v-for="(location, index) in locations" :key="index">
             <ion-label>
-              Position {{ index + 1 }}: {{ location.address }}
+              Position {{ index + 1 }}: {{ location.house_number }} {{ location.road }}, {{ location.suburb }}, {{ location.city }}, {{ location.state }}, {{ location.postcode }}, {{ location.country }}
             </ion-label>
           </ion-item>
         </ion-list>
@@ -49,7 +51,7 @@
     IonLabel,
     IonButton,
     IonList,
-  } from '@ionic/vue';  // Import necessary Ionic components
+  } from '@ionic/vue';
   import axios from 'axios';
   import { useRouter } from 'vue-router';
   
@@ -68,8 +70,12 @@
     setup() {
       const latitude = ref<number | null>(null);  // For current latitude
       const longitude = ref<number | null>(null); // For current longitude
-      const address = ref<string | null>(null);   // To store the full address
-      const locations = ref<{ latitude: number; longitude: number; address: string }[]>([]);  // List of saved locations
+      const address = ref<{ 
+        house_number?: string; road?: string; suburb?: string; city?: string; 
+        state?: string; postcode?: string; country?: string; } | null>(null);   // To store the full address
+      const locations = ref<{ 
+        house_number?: string; road?: string; suburb?: string; city?: string; 
+        state?: string; postcode?: string; country?: string; }[]>([]);  // List of saved locations
       const router = useRouter();
   
       // Get the user's current position
@@ -80,11 +86,16 @@
               latitude.value = position.coords.latitude;
               longitude.value = position.coords.longitude;
   
-              // Fetch the full address using reverse geocoding
+              // Fetch the full address using Nominatim API
               await fetchAddress(latitude.value, longitude.value);
             },
             (error) => {
               console.error('Error getting location:', error);
+            },
+            {
+              enableHighAccuracy: true,  // Request more accurate coordinates
+              timeout: 10000,            // Timeout after 10 seconds
+              maximumAge: 0              // Do not use cached position
             }
           );
         } else {
@@ -92,7 +103,7 @@
         }
       };
   
-      // Fetch the full address from the Nominatim API (OpenStreetMap)
+      // Fetch the full address from Nominatim (OpenStreetMap) API
       const fetchAddress = async (lat: number, lon: number) => {
         try {
           const response = await axios.get(`https://nominatim.openstreetmap.org/reverse`, {
@@ -100,10 +111,19 @@
               lat,
               lon,
               format: 'json',
+              addressdetails: 1,  // Ensure we get detailed address components
             },
           });
-          const result = response.data;
-          address.value = result.display_name; // This contains the full address (street, city, country, etc.)
+          const result = response.data.address;
+          address.value = {
+            house_number: result.house_number || 'Unknown',
+            road: result.road || 'Unknown street',
+            suburb: result.suburb || result.neighbourhood || 'Unknown suburb',
+            city: result.city || result.town || result.village || 'Unknown city',
+            state: result.state || 'Unknown state',
+            postcode: result.postcode || 'Unknown postcode',
+            country: result.country || 'Unknown country',
+          };
         } catch (error) {
           console.error('Error fetching address:', error);
         }
@@ -111,12 +131,8 @@
   
       // Add the current position and address to the list
       const addLocation = () => {
-        if (latitude.value !== null && longitude.value !== null && address.value !== null) {
-          locations.value.push({
-            latitude: latitude.value,
-            longitude: longitude.value,
-            address: address.value,
-          });
+        if (address.value !== null) {
+          locations.value.push({ ...address.value });
         }
       };
   

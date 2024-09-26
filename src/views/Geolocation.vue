@@ -15,11 +15,16 @@
           <ion-label>Longitude: {{ longitude }}</ion-label>
         </ion-item>
   
+        <!-- Display full address (street, city, country, etc.) -->
+        <ion-item v-if="address">
+          <ion-label>Address: {{ address }}</ion-label>
+        </ion-item>
+  
         <!-- List of saved locations -->
         <ion-list>
           <ion-item v-for="(location, index) in locations" :key="index">
             <ion-label>
-              Position {{ index + 1 }}: Latitude {{ location.latitude }}, Longitude {{ location.longitude }}
+              Position {{ index + 1 }}: {{ location.address }}
             </ion-label>
           </ion-item>
         </ion-list>
@@ -45,6 +50,7 @@
     IonButton,
     IonList,
   } from '@ionic/vue';  // Import necessary Ionic components
+  import axios from 'axios';
   import { useRouter } from 'vue-router';
   
   export default defineComponent({
@@ -62,16 +68,20 @@
     setup() {
       const latitude = ref<number | null>(null);  // For current latitude
       const longitude = ref<number | null>(null); // For current longitude
-      const locations = ref<{ latitude: number; longitude: number }[]>([]);  // List of saved locations
+      const address = ref<string | null>(null);   // To store the full address
+      const locations = ref<{ latitude: number; longitude: number; address: string }[]>([]);  // List of saved locations
       const router = useRouter();
   
       // Get the user's current position
       const getCurrentPosition = () => {
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
-            (position) => {
+            async (position) => {
               latitude.value = position.coords.latitude;
               longitude.value = position.coords.longitude;
+  
+              // Fetch the full address using reverse geocoding
+              await fetchAddress(latitude.value, longitude.value);
             },
             (error) => {
               console.error('Error getting location:', error);
@@ -82,10 +92,31 @@
         }
       };
   
-      // Add the current position to the list
+      // Fetch the full address from the Nominatim API (OpenStreetMap)
+      const fetchAddress = async (lat: number, lon: number) => {
+        try {
+          const response = await axios.get(`https://nominatim.openstreetmap.org/reverse`, {
+            params: {
+              lat,
+              lon,
+              format: 'json',
+            },
+          });
+          const result = response.data;
+          address.value = result.display_name; // This contains the full address (street, city, country, etc.)
+        } catch (error) {
+          console.error('Error fetching address:', error);
+        }
+      };
+  
+      // Add the current position and address to the list
       const addLocation = () => {
-        if (latitude.value !== null && longitude.value !== null) {
-          locations.value.push({ latitude: latitude.value, longitude: longitude.value });
+        if (latitude.value !== null && longitude.value !== null && address.value !== null) {
+          locations.value.push({
+            latitude: latitude.value,
+            longitude: longitude.value,
+            address: address.value,
+          });
         }
       };
   
@@ -96,7 +127,6 @@
   
       // Log the user out and redirect to the login page
       const logout = () => {
-        // Implement the logic for logging out the user (e.g., clear session, token)
         router.push('/login');
       };
   
@@ -108,6 +138,7 @@
       return {
         latitude,
         longitude,
+        address,
         locations,
         addLocation,
         clearLocations,

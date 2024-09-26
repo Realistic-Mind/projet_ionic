@@ -7,6 +7,7 @@ import PageTrois from '../views/PageTrois.vue'
 import PageQuatre from '@/views/PageQuatre.vue';
 import Login from '@/views/Login.vue';
 import Signup from '@/views/Signup.vue';
+import Geolocation from '@/views/Geolocation.vue';
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -21,6 +22,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/signup',
     name: 'Signup',
     component: Signup,
+  },
+  {
+    path: '/geolocation',
+    name: 'Geolocation',
+    component: Geolocation,
   }
 
 ]

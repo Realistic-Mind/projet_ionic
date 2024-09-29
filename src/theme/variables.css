@@ -12,11 +12,35 @@ ion-button {
   
   /* Shared toolbar background */
   ion-toolbar {
-    --background: #ffc0cb; /* Pink toolbar background */
+    --background: #e70e32; /* Pink toolbar background */
   }
   
   /* Shared content background */
   ion-content {
-    background-color: #4b2e2a; /* Dark brown background */
+    
+    --background: #4b2e2a; /* Dark brown background */
   }
   
+  ion-label::part(text) {
+    font-size: 16px !important;
+    color: white !important;
+    padding-bottom: 12px !important;
+  }
+  
+  ion-input::part(native) {
+    padding-top: 10px !important;
+    padding-bottom: 8px !important;
+    line-height: 24px !important;
+    font-size: 16px !important;
+    color: black !important;
+  }
+  
+  
+  /* Styling the native item inside ion-item */
+  ion-item::part(native) {
+    
+    --padding-start: 16px !important;      /* Space before the text starts */
+    --padding-end: 16px !important;        /* Space after the text ends */
+    margin-bottom: 20px !important;        /* Space between items */
+    background-color: white !important; /* Ensure the item background is transparent */
+  }

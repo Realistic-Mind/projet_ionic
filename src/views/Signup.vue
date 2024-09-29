@@ -131,13 +131,4 @@
   });
   </script>
   
-  <style scoped>
-  ion-item {
-    margin-bottom: 15px;
-  }
-  
-  ion-label {
-    color: black;
-  }
-  </style>
   

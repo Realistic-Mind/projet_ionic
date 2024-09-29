@@ -96,11 +96,11 @@
         }
   
         try {
-          // Step 2: Call the API to send the data
+          //  Call the API to send the data
           const data = await login(this.email, this.password);
           console.log('Login Successful:', data);
   
-          // Step 3: Redirect to a simple page (e.g., home or dashboard)
+          //  Redirect to a simple page 
           this.$router.push('/geolocation');  // Redirect to a simple page like '/home'
         } catch (error) {
           // Step 4: Handle errors and display an error message
@@ -123,13 +123,4 @@
   });
   </script>
   
-  <style scoped>
-  ion-item {
-    margin-bottom: 15px;
-  }
-  
-  ion-label {
-    color: black;
-  }
-  </style>
   

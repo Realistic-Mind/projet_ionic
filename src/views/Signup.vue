@@ -9,26 +9,26 @@
       <ion-content class="ion-padding">
         <!-- Input for First Name -->
         <ion-item>
-          <ion-label position="floating">First Name</ion-label>
-          <ion-input v-model="firstName" required></ion-input>
+          <ion-label class="custom-label" position="floating">First Name</ion-label>
+          <ion-input  class="custom-input" v-model="firstName" required></ion-input>
         </ion-item>
   
         <!-- Input for Last Name -->
         <ion-item>
-          <ion-label position="floating">Last Name</ion-label>
-          <ion-input v-model="lastName" required></ion-input>
+          <ion-label class="custom-label" position="floating">Last Name</ion-label>
+          <ion-input class="custom-input" v-model="lastName" required></ion-input>
         </ion-item>
   
         <!-- Input for Email -->
         <ion-item>
-          <ion-label position="floating">Email</ion-label>
-          <ion-input v-model="email" type="email" required></ion-input>
+          <ion-label class="custom-label" position="floating">Email</ion-label>
+          <ion-input class="custom-input" v-model="email" type="email" required></ion-input>
         </ion-item>
   
         <!-- Input for Password -->
         <ion-item>
-          <ion-label position="floating">Password</ion-label>
-          <ion-input v-model="password" type="password" required></ion-input>
+          <ion-label class="custom-label" position="floating">Password</ion-label>
+          <ion-input class="custom-input" v-model="password" type="password" required></ion-input>
         </ion-item>
   
         <!-- Sign Up Button -->
@@ -98,18 +98,18 @@
     },
     methods: {
       async handleSignUp() {
-        // 1. Check if all fields are filled
+        //  Check if all fields are filled
         if (!this.firstName || !this.lastName || !this.email || !this.password) {
           this.errorMessage = 'Please fill in all the fields';
           return;
         }
   
         try {
-          // 2. Send data to the API
+          //  Send data to the API
           const data = await signUp(this.firstName, this.lastName, this.email, this.password);
           console.log('Sign Up Successful:', data);
   
-          // 3. Redirect to the login page
+          //  Redirect to the login page
           this.$router.push('/login');
         } catch (error) {
           this.errorMessage = this.getErrorMessage(error);  // Handle any errors

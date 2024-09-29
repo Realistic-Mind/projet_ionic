@@ -23,7 +23,7 @@
         </ion-item>
   
         <!-- List of saved locations with latitude, longitude, and address -->
-        <ion-list>
+        <ion-list class="custom-list">
           <ion-item v-for="(location, index) in locations" :key="index">
             <ion-label>
               <div>Position {{ index + 1 }}:</div>
@@ -122,12 +122,6 @@
   </script>
   
   <style scoped>
-  ion-item {
-    margin-bottom: 15px;
-  }
   
-  ion-label {
-    color: black;
-  }
   </style>
   

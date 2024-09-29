@@ -9,15 +9,15 @@
       <ion-content class="ion-padding">
         <!-- Input for Email -->
         <ion-item>
-          <ion-label position="floating">Email</ion-label>
-          <ion-input v-model="email" type="email" required></ion-input>
+          <ion-label class="custom-label" position="floating">Email</ion-label>
+          <ion-input  class="custom-input" v-model="email" type="email" required></ion-input>
         </ion-item>
   
         <!-- Input for Password -->
         <ion-item>
-          <ion-label position="floating">Password</ion-label>
-          <ion-input v-model="password" type="password" required></ion-input>
-        </ion-item>
+          <ion-label class="custom-label" position="floating">Password</ion-label>
+          <ion-input class="custom-input" v-model="password" type="password" required></ion-input>
+        </ion-item> 
   
         <!-- Button for Login -->
         <ion-button expand="block" @click="handleLogin">Login</ion-button>
@@ -101,7 +101,7 @@
           console.log('Login Successful:', data);
   
           //  Redirect to a simple page 
-          this.$router.push('/geolocation');  // Redirect to a simple page like '/home'
+          this.$router.push('/geolocation');  
         } catch (error) {
           // Step 4: Handle errors and display an error message
           this.errorMessage = this.getErrorMessage(error);

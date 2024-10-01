@@ -19,33 +19,22 @@ ion-button {
     
     --background: #4b2e2a; /* Dark brown background */
   }
-  /* i cant use those styles for some reason */
-  ion-label::part(text) {
-    font-size: 16px !important;
-    color: white !important;
-    padding-bottom: 12px !important;
-  }
   
-  ion-input::part(native) {
-    padding-top: 10px !important;
-    padding-bottom: 8px !important;
-    line-height: 24px !important;
-    font-size: 16px !important;
-    color: black !important;
-  }
+  
   .custom-input {
-     /* Light grey background for input */
-    padding: 15px !important;               /* Add padding inside the input */
-           /
+    
+    padding: 12px !important;
+    border-radius: 4px
+    
   }
   .custom-label {
-    /* Light grey background for input */
+   
    padding: 4px !important;               /* Add padding inside the input */
           /
  }
   /* Styling the native item inside ion-item */
   ion-item::part(native) {
-    
+    border-radius: 4px;
     --padding-start: 16px !important;      /* Space before the text starts */
     --padding-end: 16px !important;        /* Space after the text ends */
     margin-bottom: 20px !important;        /* Space between items */

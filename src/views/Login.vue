@@ -89,7 +89,7 @@
     },
     methods: {
       async handleLogin() {
-        // Step 1: Check if email and password are filled
+        //  Check if email and password are filled
         if (!this.email || !this.password) {
           this.errorMessage = 'Please fill in both email and password';
           return;
@@ -103,7 +103,7 @@
           //  Redirect to a simple page 
           this.$router.push('/geolocation');  
         } catch (error) {
-          // Step 4: Handle errors and display an error message
+          //  Handle errors and display an error message
           this.errorMessage = this.getErrorMessage(error);
         }
       },

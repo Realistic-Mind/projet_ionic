@@ -1,17 +1,17 @@
 
 
-/* Add in theme/variables.scss or theme/global.scss */
+
 
 /* Shared button style */
 ion-button {
-    --background: #ffff00; /* Yellow background for buttons */
-    color: black;          /* Black text for all buttons */
-    font-weight: bold;      /* Bold text for buttons */
+    --background: #ffff00; 
+    color: black;         
+    font-weight: bold;      
   }
   
   /* Shared toolbar background */
   ion-toolbar {
-    --background: #e70e32; /* Pink toolbar background */
+    --background: #e70e32; 
   }
   
   /* Shared content background */
